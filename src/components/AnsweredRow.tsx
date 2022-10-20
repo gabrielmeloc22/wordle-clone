@@ -27,34 +27,6 @@ const propsByState: Record<State, StyleProps> = {
   },
 };
 
-const getStyleProps = (answer: string[], solution: string[]) => {
-  const styles: StyleProps[] = [];
-  const letterCount = solution.reduce((acc, curr) => {
-    return {
-      ...acc,
-      [curr]: (acc[curr] || 0) + 1,
-    };
-  }, {} as Record<string, number>);
-
-  answer.forEach((letter, i) => {
-    if (letter === solution[i]) {
-      styles.push(propsByState.correct);
-      letterCount[letter]--;
-    } else {
-      styles.push(propsByState.incorrect);
-    }
-  });
-
-  answer.forEach((letter, i) => {
-    if (solution.includes(letter) && letterCount[letter] >= 1) {
-      styles[i] = propsByState.contains;
-      letterCount[letter]--;
-    }
-  });
-
-  return styles;
-};
-
 const revealAnimation = keyframes({
   "0%": {
     perspective: "1000px",
@@ -71,7 +43,7 @@ const revealAnimation = keyframes({
 });
 
 export function AnsweredRow({ answer }: AnsweredRowProps) {
-  const solution = ["a", "b", "c", "d", "e"];
+  const solution = ["c", "a", "r", "r", "o"];
   const solutionStyles = getStyleProps(answer, solution);
 
   return (
@@ -113,3 +85,33 @@ export function AnsweredRow({ answer }: AnsweredRowProps) {
     </Flex>
   );
 }
+
+const getStyleProps = (answer: string[], solution: string[]) => {
+  const styles: StyleProps[] = [];
+  const letterCount = solution.reduce((acc, curr) => {
+    return {
+      ...acc,
+      [curr]: (acc[curr] || 0) + 1,
+    };
+  }, {} as Record<string, number>);
+  console.log(letterCount);
+
+  answer.forEach((letter, i) => {
+    console.log(letter, solution[i]);
+    if (letter === solution[i]) {
+      styles.push(propsByState.correct);
+      letterCount[letter]--;
+    } else {
+      styles.push(propsByState.incorrect);
+    }
+  });
+
+  answer.forEach((letter, i) => {
+    if (solution.includes(letter) && letterCount[letter] >= 1 && letter !== solution[i]) {
+      styles[i] = propsByState.contains;
+      letterCount[letter]--;
+    }
+  });
+
+  return styles;
+};
