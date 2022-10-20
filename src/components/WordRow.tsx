@@ -26,10 +26,7 @@ const errorAnimation = keyframes({
 export function WordRow({ active }: WordRowProps) {
   const [focusedInput, setFocusedInput] = useState(0);
   const [word, setWord] = useState(["", "", "", "", ""]);
-  const {
-    sendAnswer,
-    attempt: { error },
-  } = useAttempt();
+  const { sendAnswer, error } = useAttempt();
 
   useEffect(() => {
     if (!active) return;
@@ -67,13 +64,10 @@ export function WordRow({ active }: WordRowProps) {
 
   return (
     <Flex
-      data-error={error}
       css={{
         marginTop: "1rem",
         gap: "0.75rem",
-        "&[data-error=true]": {
-          animation: `${errorAnimation} 0.3s ease-in-out`,
-        },
+        animation: error ? `${errorAnimation} 0.3s ease-in-out` : "",
       }}
     >
       {new Array(5).fill(null).map((_, i) => (
